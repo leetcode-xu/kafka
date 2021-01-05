@@ -3,12 +3,18 @@ package kafkademo;
 import akka.dispatch.Foreach;
 import scala.tools.nsc.backend.icode.Opcodes;
 import scala.tools.nsc.doc.model.Public;
+import scala.util.parsing.json.JSON;
 import scala.xml.dtd.PublicID;
 
 import java.lang.reflect.Array;
 import java.security.PublicKey;
 import java.sql.SQLOutput;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static scala.util.parsing.json.JSON.*;
 
 class Demo<T extends Integer>{
     public T a;
@@ -51,6 +57,9 @@ class Student{
         this.name = name;
         this.sex = sex;
         this.age = age;
+    }
+    public static int fun(int x){
+        return x+1;
     }
     public void print(){
         System.out.println("woshistudent print");
@@ -96,7 +105,16 @@ public class javademo {
         students.add(student4);
         Student[] ss = students.toArray(new Student[0]);
         new Demo<Integer>(new Integer(8)).ceshi(new Integer(9));
-
+        List<String> strings = Arrays.asList("H", "e", "l", "o", "W", "r", "d");
+        List<Object> collect = strings.stream().flatMap(new Function<String, Stream<String>>() {
+            @Override
+            public Stream<String> apply(String s) {
+                return Arrays.stream(s.split(""));
+            }
+        }).collect(Collectors.toList());
+//        collect.contains()
+        int[] ints = {1,2,3};
+        Arrays.asList(ints).stream().map(x-> Arrays.stream(x).boxed().map(xxx->xxx+1)).forEach(System.out::println);
     }
 
 }
